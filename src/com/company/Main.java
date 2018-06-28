@@ -9,15 +9,27 @@ public class Main {
 //        int[] a = {3, 5, 6, 2};
 //        swapMinMax(a);
 //        swapMinMaxBetter(a);
+
         //Test Unique
 //        System.out.println("Test Is Unique");
 //        isUniqueChars("ahshfgdfds");
 //        System.out.println("####");
 //        System.out.println(isUniqueChars("ketQua: " + "ahshfgdfds"));
+
         //Test is permutation
 //        System.out.println(permutation("abc", "cga"));
-        System.out.println(permutation2("abc", "cga"));
+//        System.out.println(permutation2("abc", "cga"));
 
+        // Test change space to '20%'
+        char[] ch = {'t', 'h', 'e', ' ', 'd', 'o', 'g', ' ', ' ', ' ', ' ', ' ', ' '};
+        char[] ch1 = {'t', 'h', 'e', ' ', 'd', 'o', 'g'};
+        char[] chars = "   the dog   ".toCharArray();
+        char[] chars1 = "the dog".toCharArray();
+//        System.out.println(ch1);
+//        System.out.println(ch);
+//        System.out.println(chars);
+        replaceSpace(chars, chars.length);
+        replaceSpace(chars1, chars1.length);
 
 
     }
@@ -46,7 +58,6 @@ public class Main {
     }
 
     //Solution 2
-
     static void swapMinMaxBetter(int[] array) {
         int minIndex = getMinIndex(array);
         int maxIndex = getMaxIndex(array);
@@ -60,8 +71,6 @@ public class Main {
         System.out.println("####");
         System.out.println("Min " + array[minIndex]);
         System.out.println("Max " + array[maxIndex]);
-
-
 
 
     }
@@ -99,16 +108,15 @@ public class Main {
     // Test is Unique Char
     // Thuat toan kiem tra xem trong chuoi String co ky tu lap lai hay ko
     // ahshfgdfds
-
     static boolean isUniqueChars(String str) {
-        if(str.length() > 128) return false;    // ma ASCII co 128 ky tu, lon hon 128 ky tu nghia la da lap lai
+        if (str.length() > 128) return false;    // ma ASCII co 128 ky tu, lon hon 128 ky tu nghia la da lap lai
 
         boolean[] char_set = new boolean[128];      //xac dinh duoc chi dung 128 ky tu nen xac dinh kich thuoc cho array
         for (int i = 0; i < str.length(); i++) {
             int val = str.charAt(i);            // tra ve vi tri cua ky tu thu i trong bang ASCII, vi du chu a trong bang ASCII la 97
 //            System.out.println(val);
 //            System.out.println(char_set[val]);
-            if(char_set[val]) {                 // kiem tra neu tai vi tri 97 da co trong chuoi String chua, ban dau chua co nen char_set[var] = false
+            if (char_set[val]) {                 // kiem tra neu tai vi tri 97 da co trong chuoi String chua, ban dau chua co nen char_set[var] = false
                 return false;
             }
 //            System.out.println(char_set[val]);
@@ -122,14 +130,14 @@ public class Main {
 
     }
 
+    //Test Permutation
+    //Solution 1
     static boolean permutation(String s1, String s2) {
-        if(s1.length() != s2.length()) {
+        if (s1.length() != s2.length()) {
             return false;
         } else {
             return sort(s1).equals(sort(s2));
         }
-
-
     }
 
     static String sort(String str) {
@@ -138,14 +146,13 @@ public class Main {
         return new String(chars);
     }
 
-    static boolean permutation2(String s1, String s2){
-        if(s1.length() != s2.length()) {
+    //Solution 2
+    static boolean permutation2(String s1, String s2) {
+        if (s1.length() != s2.length()) {
             return false;
         }
-
         int[] letters = new int[128];
         char[] s1_array = s1.toCharArray();
-        
         for (char c : s1_array) {
             System.out.println(c);
             System.out.println(letters[c]);
@@ -154,29 +161,74 @@ public class Main {
             System.out.println("###");
             System.out.println(letters[c]);
         }
-
         System.out.println("------");
-
         for (int i = 0; i < s2.length(); i++) {
             int c = (int) s2.charAt(i);
-
             System.out.println(c);
             System.out.println(letters[c]);
             letters[c]--;
             System.out.println("###");
             System.out.println(letters[c]);
-            if(letters[c] < 0) {
+            if (letters[c] < 0) {
                 return false;
             }
         }
-
         return true;
     }
 
 
+    // Test Write a method to replace all spaces in a string with '%20'
+    static void replaceSpace(char[] str, int trueLength) {
+        int spaceCount = 0;
+        for (int i = 0; i < trueLength; i++) {
+            if (str[i] == ' ') {
+                spaceCount++;
+            }
+        }
 
+        // indexNew is the length of new String, trueLength is the length of the old String
+        // spaceCount * 2 : because already have space = ' ' in the old length, mean length for space already have 1 so instead *3 for '%20" we *2
+        int indexNew = trueLength + spaceCount * 2;
 
+        // check if the end of old string is the space or not, if have space will make the end of array
+        if (trueLength < str.length) {
+            str[trueLength] = '\0';     //END ARRAY: trueLength is the end index of old String, so make it the end of array of old String have the end is space
+        }
 
+        // Solution 1: backward
+        char[] newArray = new char[indexNew];
+
+        for (int i = trueLength - 1; i >= 0; i--) {
+            if (str[i] == ' ') {
+                newArray[indexNew - 1] = '0';        // str[i]: char of old string at index i => consider old string
+                newArray[indexNew - 2] = '2';        // str[indexNew]: char of new string at new index => consider new string
+                newArray[indexNew - 3] = '%';
+                indexNew = indexNew - 3;        // -3 because already make for 3 new char
+            } else {
+                newArray[indexNew - 1] = str[i];
+                indexNew--;
+            }
+        }
+        System.out.println(newArray);
+
+        // Solution 2: forward
+//        char[] newArray = new char[indexNew];
+//        int newArrayPosition = 0;
+//
+//        for (int i = 0; i < trueLength; i++) {
+//            if (str[i] == ' ') {
+//                newArray[newArrayPosition] = '%';
+//                newArray[newArrayPosition + 1] = '2';
+//                newArray[newArrayPosition + 2] = '0';
+//                newArrayPosition = newArrayPosition + 3;
+//            } else {
+//                newArray[newArrayPosition] = str[i];
+//                newArrayPosition++;
+//            }
+//        }
+////        return newArray;      //https://stackoverflow.com/questions/10007631/write-a-method-to-replace-all-spaces-in-a-string-with-20
+//        System.out.println(newArray);
+    }
 
 
 }
