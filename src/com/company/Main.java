@@ -28,8 +28,12 @@ public class Main {
 //        System.out.println(ch1);
 //        System.out.println(ch);
 //        System.out.println(chars);
-        replaceSpace(chars, chars.length);
-        replaceSpace(chars1, chars1.length);
+//        replaceSpace(chars, chars.length);
+//        replaceSpace(chars1, chars1.length);
+
+        // Test Permutation Palindrome
+        String a = "tact Coa oddgg";
+        System.out.println(isPermutationOfPalindrome(a));
 
 
     }
@@ -230,5 +234,53 @@ public class Main {
 //        System.out.println(newArray);
     }
 
+
+
+    //1.4 Palindrome Permutation
+    // Is Strings with even length(after remove all non-letter) must have all even counts of characters.
+    // Is Strings of an odd length must have exactly one character with an odd.
+    // It's therefore sufficient to say that, to be a permutation of a palindrome, a string can have no more than one character that is odd.
+    static boolean isPermutationOfPalindrome(String phrase) {
+        int[] table = buildCharFrequencyTable02(phrase);
+        return checkMaxOfOdd(table);
+    }
+
+    // getNumericValue of char z to a is 35 to 10
+    static int[] buildCharFrequencyTable02(String phrase) {
+        int[] table = new int[Character.getNumericValue('z') - Character.getNumericValue('a') + 1];
+        for (char c : phrase.toCharArray()) {
+            int x = getCharacterNumber02(c);
+            if(x != -1) {
+                table[x]++;
+            }
+        }
+        return table;
+    }
+
+    // check it must be a character from a to z, if not return -1
+    static int getCharacterNumber02(char c) {
+        int a = Character.getNumericValue('a');
+        int z = Character.getNumericValue('z');
+        int val = Character.getNumericValue(c);
+        if(val >= a && val <= z ) {
+            return val - a;
+        }
+
+        return -1;
+    }
+
+    static boolean checkMaxOfOdd(int[] table) {
+        boolean check = false;
+        for (int count : table) {
+            if(count % 2 == 1) {     // lan dau nhay vo bo qua va set check = true
+                if(check) {
+                    return false;
+                }
+
+                check = true;
+            }
+        }
+        return true;
+    }
 
 }
